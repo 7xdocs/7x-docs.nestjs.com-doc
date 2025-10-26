@@ -5,6 +5,8 @@
 ## 文档服务启动
 在 `_7x/zh` 目录下执行 `npm run start ` 即可
 
+执行 `npm run build` 命令生成静态文件,输出在 dist 目录下
+
 ## prompt
 
 ```
