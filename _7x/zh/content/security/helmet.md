@@ -1,26 +1,26 @@
 ### Helmet
 
-[Helmet](https://github.com/helmetjs/helmet) can help protect your app from some well-known web vulnerabilities by setting HTTP headers appropriately. Generally, Helmet is just a collection of smaller middleware functions that set security-related HTTP headers (read [more](https://github.com/helmetjs/helmet#how-it-works)).
+[Helmet](https://github.com/helmetjs/helmet) 可以通过适当设置 HTTP 头来帮助保护您的应用免受一些众所周知的 Web 漏洞的侵害。通常，Helmet 只是一组较小的中间件函数的集合，这些函数设置了与安全相关的 HTTP 头（阅读[更多](https://github.com/helmetjs/helmet#how-it-works)）。
 
-> info **Hint** Note that applying `helmet` as global or registering it must come before other calls to `app.use()` or setup functions that may call `app.use()`. This is due to the way the underlying platform (i.e., Express or Fastify) works, where the order that middleware/routes are defined matters. If you use middleware like `helmet` or `cors` after you define a route, then that middleware will not apply to that route, it will only apply to routes defined after the middleware.
+> info **提示** 请注意，将 `helmet` 作为全局应用或注册它必须在其他调用 `app.use()` 或可能调用 `app.use()` 的设置函数之前进行。这是由于底层平台（即 Express 或 Fastify）的工作方式决定的，其中中间件/路由的定义顺序很重要。如果您在定义路由之后使用像 `helmet` 或 `cors` 这样的中间件，那么该中间件将不会应用于该路由，它只会应用于在中间件之后定义的路由。
 
-#### Use with Express (default)
+#### 与 Express 一起使用（默认）
 
-Start by installing the required package.
+首先安装所需的包。
 
 ```bash
 $ npm i --save helmet
 ```
 
-Once the installation is complete, apply it as a global middleware.
+安装完成后，将其作为全局中间件应用。
 
 ```typescript
 import helmet from 'helmet';
-// somewhere in your initialization file
+// 在您的初始化文件中的某个位置
 app.use(helmet());
 ```
 
-> warning **Warning** When using `helmet`, `@apollo/server` (4.x), and the [Apollo Sandbox](https://docs.nestjs.com/graphql/quick-start#apollo-sandbox), there may be a problem with [CSP](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP) on the Apollo Sandbox. To solve this issue configure the CSP as shown below:
+> warning **警告** 当同时使用 `helmet`、`@apollo/server` (4.x) 和 [Apollo Sandbox](https://docs.nestjs.com/graphql/quick-start#apollo-sandbox) 时，Apollo Sandbox 的 [CSP](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP) 可能会出现问题。要解决此问题，请按如下方式配置 CSP：
 >
 > ```typescript
 > app.use(helmet({
@@ -35,23 +35,23 @@ app.use(helmet());
 >   },
 > }));
 
-#### Use with Fastify
+#### 与 Fastify 一起使用
 
-If you are using the `FastifyAdapter`, install the [@fastify/helmet](https://github.com/fastify/fastify-helmet) package:
+如果您使用 `FastifyAdapter`，请安装 [@fastify/helmet](https://github.com/fastify/fastify-helmet) 包：
 
 ```bash
 $ npm i --save @fastify/helmet
 ```
 
-[fastify-helmet](https://github.com/fastify/fastify-helmet) should not be used as a middleware, but as a [Fastify plugin](https://www.fastify.io/docs/latest/Reference/Plugins/), i.e., by using `app.register()`:
+[fastify-helmet](https://github.com/fastify/fastify-helmet) 不应作为中间件使用，而应作为 [Fastify 插件](https://www.fastify.io/docs/latest/Reference/Plugins/)使用，即通过使用 `app.register()`：
 
 ```typescript
 import helmet from '@fastify/helmet'
-// somewhere in your initialization file
+// 在您的初始化文件中的某个位置
 await app.register(helmet)
 ```
 
-> warning **Warning** When using `apollo-server-fastify` and `@fastify/helmet`, there may be a problem with [CSP](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP) on the GraphQL playground, to solve this collision, configure the CSP as shown below:
+> warning **警告** 当同时使用 `apollo-server-fastify` 和 `@fastify/helmet` 时，GraphQL playground 的 [CSP](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP) 可能会出现问题。要解决此冲突，请按如下方式配置 CSP：
 >
 > ```typescript
 > await app.register(fastifyHelmet, {
@@ -77,7 +77,7 @@ await app.register(helmet)
 >    },
 >  });
 >
-> // If you are not going to use CSP at all, you can use this:
+> // 如果您根本不打算使用 CSP，可以这样设置：
 > await app.register(fastifyHelmet, {
 >   contentSecurityPolicy: false,
 > });

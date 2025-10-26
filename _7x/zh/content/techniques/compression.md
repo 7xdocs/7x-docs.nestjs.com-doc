@@ -1,20 +1,20 @@
-### Compression
+### 压缩
 
-Compression can greatly decrease the size of the response body, thereby increasing the speed of a web app.
+压缩可以显著减小响应体的大小，从而提高 Web 应用程序的速度。
 
-For **high-traffic** websites in production, it is strongly recommended to offload compression from the application server - typically in a reverse proxy (e.g., Nginx). In that case, you should not use compression middleware.
+对于生产环境中的**高流量**网站，强烈建议将压缩任务从应用服务器卸载——通常是在反向代理（例如 Nginx）中处理。在这种情况下，你不应使用压缩中间件。
 
-#### Use with Express (default)
+#### 在 Express 中使用（默认）
 
-Use the [compression](https://github.com/expressjs/compression) middleware package to enable gzip compression.
+使用 [compression](https://github.com/expressjs/compression) 中间件包来启用 gzip 压缩。
 
-First install the required package:
+首先安装所需的包：
 
 ```bash
 $ npm i --save compression
 ```
 
-Once the installation is complete, apply the compression middleware as global middleware.
+安装完成后，将压缩中间件应用为全局中间件。
 
 ```typescript
 import * as compression from 'compression';
@@ -22,15 +22,15 @@ import * as compression from 'compression';
 app.use(compression());
 ```
 
-#### Use with Fastify
+#### 在 Fastify 中使用
 
-If using the `FastifyAdapter`, you'll want to use [fastify-compress](https://github.com/fastify/fastify-compress):
+如果使用 `FastifyAdapter`，你需要使用 [fastify-compress](https://github.com/fastify/fastify-compress)：
 
 ```bash
 $ npm i --save @fastify/compress
 ```
 
-Once the installation is complete, apply the `@fastify/compress` middleware as global middleware.
+安装完成后，将 `@fastify/compress` 中间件应用为全局中间件。
 
 ```typescript
 import compression from '@fastify/compress';
@@ -38,7 +38,7 @@ import compression from '@fastify/compress';
 await app.register(compression);
 ```
 
-By default, `@fastify/compress` will use Brotli compression (on Node >= 11.7.0) when browsers indicate support for the encoding. While Brotli can be quite efficient in terms of compression ratio, it can also be quite slow. By default, Brotli sets a maximum compression quality of 11, although it can be adjusted to reduce compression time in lieu of compression quality by adjusting the `BROTLI_PARAM_QUALITY` between 0 min and 11 max. This will require fine tuning to optimize space/time performance. An example with quality 4: 
+默认情况下，当浏览器表明支持该编码时，`@fastify/compress` 将使用 Brotli 压缩（在 Node >= 11.7.0 上）。虽然 Brotli 在压缩率方面非常高效，但它也可能非常慢。默认情况下，Brotli 设置最大压缩质量为 11，但可以通过调整 `BROTLI_PARAM_QUALITY` 在 0（最小）到 11（最大）之间进行调整，以牺牲压缩质量来减少压缩时间。这需要微调以优化空间/时间性能。一个质量为 4 的示例：
 
 ```typescript
 import { constants } from 'zlib';
@@ -46,12 +46,12 @@ import { constants } from 'zlib';
 await app.register(compression, { brotliOptions: { params: { [constants.BROTLI_PARAM_QUALITY]: 4 } } });
 ```
 
-To simplify, you may want to tell `fastify-compress` to only use deflate and gzip to compress responses; you'll end up with potentially larger responses but they'll be delivered much more quickly.
+为了简化，你可能想告诉 `fastify-compress` 仅使用 deflate 和 gzip 来压缩响应；这样可能会导致响应体积变大，但它们的传递速度会快得多。
 
-To specify encodings, provide a second argument to `app.register`:
+要指定编码，请向 `app.register` 提供第二个参数：
 
 ```typescript
 await app.register(compression, { encodings: ['gzip', 'deflate'] });
 ```
 
-The above tells `fastify-compress` to only use gzip and deflate encodings, preferring gzip if the client supports both.
+以上代码告诉 `fastify-compress` 仅使用 gzip 和 deflate 编码，如果客户端同时支持两者，则优先使用 gzip。

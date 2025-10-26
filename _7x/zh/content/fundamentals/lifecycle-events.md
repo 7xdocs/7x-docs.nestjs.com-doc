@@ -1,38 +1,38 @@
-### Lifecycle Events
+### 生命周期事件
 
-A Nest application, as well as every application element, has a lifecycle managed by Nest. Nest provides **lifecycle hooks** that give visibility into key lifecycle events, and the ability to act (run registered code on your modules, providers or controllers) when they occur.
+Nest 应用程序以及每个应用程序元素都有一个由 Nest 管理的生命周期。Nest 提供了**生命周期钩子**，可以查看关键生命周期事件，并在这些事件发生时采取行动（在模块、提供者或控制器上运行已注册的代码）。
 
-#### Lifecycle sequence
+#### 生命周期顺序
 
-The following diagram depicts the sequence of key application lifecycle events, from the time the application is bootstrapped until the node process exits. We can divide the overall lifecycle into three phases: **initializing**, **running** and **terminating**. Using this lifecycle, you can plan for appropriate initialization of modules and services, manage active connections, and gracefully shutdown your application when it receives a termination signal.
+下图描绘了关键应用程序生命周期事件的顺序，从应用程序启动开始，直到节点进程退出。我们可以将整个生命周期分为三个阶段：**初始化**、**运行**和**终止**。利用这个生命周期，你可以规划模块和服务的适当初始化，管理活动连接，并在应用程序收到终止信号时优雅地关闭它。
 
 <figure><img class="illustrative-image" src="/assets/lifecycle-events.png" /></figure>
 
-#### Lifecycle events
+#### 生命周期事件
 
-Lifecycle events happen during application bootstrapping and shutdown. Nest calls registered lifecycle hook methods on modules, providers and controllers at each of the following lifecycle events (**shutdown hooks** need to be enabled first, as described [below](https://docs.nestjs.com/fundamentals/lifecycle-events#application-shutdown)). As shown in the diagram above, Nest also calls the appropriate underlying methods to begin listening for connections, and to stop listening for connections.
+生命周期事件发生在应用程序启动和关闭期间。Nest 在以下每个生命周期事件时，会在模块、提供者和控制器上调用已注册的生命周期钩子方法（**需要先启用关闭钩子**，如下所述）。如上图所示，Nest 还会调用适当的底层方法来开始监听连接和停止监听连接。
 
-In the following table, `onModuleInit` and `onApplicationBootstrap` are only triggered if you explicitly call `app.init()` or `app.listen()`.
+在下表中，仅当你显式调用 `app.init()` 或 `app.listen()` 时，才会触发 `onModuleInit` 和 `onApplicationBootstrap`。
 
-In the following table, `onModuleDestroy`, `beforeApplicationShutdown` and `onApplicationShutdown` are only triggered if you explicitly call `app.close()` or if the process receives a special system signal (such as SIGTERM) and you have correctly called `enableShutdownHooks` at application bootstrap (see below **Application shutdown** part).
+在下表中，仅当你显式调用 `app.close()` 或者进程收到特殊的系统信号（例如 SIGTERM）并且你在应用程序引导时正确调用了 `enableShutdownHooks`（参见下面的**应用程序关闭**部分），才会触发 `onModuleDestroy`、`beforeApplicationShutdown` 和 `onApplicationShutdown`。
 
-| Lifecycle hook method           | Lifecycle event triggering the hook method call                                                                                                                                                                   |
-| ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `onModuleInit()`                | Called once the host module's dependencies have been resolved.                                                                                                                                                    |
-| `onApplicationBootstrap()`      | Called once all modules have been initialized, but before listening for connections.                                                                                                                              |
-| `onModuleDestroy()`\*           | Called after a termination signal (e.g., `SIGTERM`) has been received.                                                                                                                                            |
-| `beforeApplicationShutdown()`\* | Called after all `onModuleDestroy()` handlers have completed (Promises resolved or rejected);<br />once complete (Promises resolved or rejected), all existing connections will be closed (`app.close()` called). |
-| `onApplicationShutdown()`\*     | Called after connections close (`app.close()` resolves).                                                                                                                                                          |
+| 生命周期钩子方法               | 触发钩子方法调用的生命周期事件                                                                                                                                                                 |
+| ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `onModuleInit()`               | 在宿主模块的依赖项解析完成后调用。                                                                                                                                                             |
+| `onApplicationBootstrap()`     | 在所有模块初始化之后，但在开始监听连接之前调用。                                                                                                                                               |
+| `onModuleDestroy()`\*          | 在收到终止信号（例如 `SIGTERM`）后调用。                                                                                                                                                       |
+| `beforeApplicationShutdown()`\* | 在所有 `onModuleDestroy()` 处理程序完成（Promise 已 resolved 或 rejected）后调用；<br />一旦完成（Promise 已 resolved 或 rejected），所有现有连接将被关闭（调用 `app.close()`）。 |
+| `onApplicationShutdown()`\*    | 在连接关闭后调用（`app.close()` 已 resolved）。                                                                                                                                                |
 
-\* For these events, if you're not calling `app.close()` explicitly, you must opt-in to make them work with system signals such as `SIGTERM`. See [Application shutdown](fundamentals/lifecycle-events#application-shutdown) below.
+\* 对于这些事件，如果你没有显式调用 `app.close()`，则必须选择加入才能使它们与系统信号（如 `SIGTERM`）一起工作。请参见下面的[应用程序关闭](fundamentals/lifecycle-events#application-shutdown)。
 
-> warning **Warning** The lifecycle hooks listed above are not triggered for **request-scoped** classes. Request-scoped classes are not tied to the application lifecycle and their lifespan is unpredictable. They are exclusively created for each request and automatically garbage-collected after the response is sent.
+> warning **警告** 上面列出的生命周期钩子不会在**请求作用域**的类上触发。请求作用域的类不绑定到应用程序生命周期，其生命周期是不可预测的。它们专门为每个请求创建，并在响应发送后自动进行垃圾回收。
 
-> info **Hint** Execution order of `onModuleInit()` and `onApplicationBootstrap()` directly depends on the order of module imports, awaiting the previous hook.
+> info **提示** `onModuleInit()` 和 `onApplicationBootstrap()` 的执行顺序直接取决于模块导入的顺序，会等待前一个钩子完成。
 
-#### Usage
+#### 用法
 
-Each lifecycle hook is represented by an interface. Interfaces are technically optional because they do not exist after TypeScript compilation. Nonetheless, it's good practice to use them in order to benefit from strong typing and editor tooling. To register a lifecycle hook, implement the appropriate interface. For example, to register a method to be called during module initialization on a particular class (e.g., Controller, Provider or Module), implement the `OnModuleInit` interface by supplying an `onModuleInit()` method, as shown below:
+每个生命周期钩子都由一个接口表示。从技术上讲，接口是可选的，因为它们在 TypeScript 编译后不存在。尽管如此，使用它们以获得强类型和编辑器工具的支持是一个好习惯。要注册一个生命周期钩子，请实现相应的接口。例如，要在特定类（例如控制器、提供者或模块）上注册一个在模块初始化期间调用的方法，请通过提供 `onModuleInit()` 方法来实现 `OnModuleInit` 接口，如下所示：
 
 ```typescript
 @@filename()
@@ -55,9 +55,9 @@ export class UsersService {
 }
 ```
 
-#### Asynchronous initialization
+#### 异步初始化
 
-Both the `OnModuleInit` and `OnApplicationBootstrap` hooks allow you to defer the application initialization process (return a `Promise` or mark the method as `async` and `await` an asynchronous method completion in the method body).
+`OnModuleInit` 和 `OnApplicationBootstrap` 钩子都允许你延迟应用程序初始化过程（返回一个 `Promise` 或将方法标记为 `async` 并在方法体中 `await` 异步方法完成）。
 
 ```typescript
 @@filename()
@@ -70,11 +70,11 @@ async onModuleInit() {
 }
 ```
 
-#### Application shutdown
+#### 应用程序关闭
 
-The `onModuleDestroy()`, `beforeApplicationShutdown()` and `onApplicationShutdown()` hooks are called in the terminating phase (in response to an explicit call to `app.close()` or upon receipt of system signals such as SIGTERM if opted-in). This feature is often used with [Kubernetes](https://kubernetes.io/) to manage containers' lifecycles, by [Heroku](https://www.heroku.com/) for dynos or similar services.
+`onModuleDestroy()`、`beforeApplicationShutdown()` 和 `onApplicationShutdown()` 钩子在终止阶段被调用（响应显式调用 `app.close()` 或在选择加入的情况下收到系统信号如 SIGTERM 时）。此功能通常与 [Kubernetes](https://kubernetes.io/) 一起用于管理容器的生命周期，或者被 [Heroku](https://www.heroku.com/) 用于 dynos 或类似服务。
 
-Shutdown hook listeners consume system resources, so they are disabled by default. To use shutdown hooks, you **must enable listeners** by calling `enableShutdownHooks()`:
+关闭钩子监听器会消耗系统资源，因此默认情况下是禁用的。要使用关闭钩子，你**必须启用监听器**，通过调用 `enableShutdownHooks()`：
 
 ```typescript
 import { NestFactory } from '@nestjs/core';
@@ -83,7 +83,7 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // Starts listening for shutdown hooks
+  // 开始监听关闭钩子
   app.enableShutdownHooks();
 
   await app.listen(process.env.PORT ?? 3000);
@@ -91,27 +91,27 @@ async function bootstrap() {
 bootstrap();
 ```
 
-> warning **warning** Due to inherent platform limitations, NestJS has limited support for application shutdown hooks on Windows. You can expect `SIGINT` to work, as well as `SIGBREAK` and to some extent `SIGHUP` - [read more](https://nodejs.org/api/process.html#process_signal_events). However `SIGTERM` will never work on Windows because killing a process in the task manager is unconditional, "i.e., there's no way for an application to detect or prevent it". Here's some [relevant documentation](https://docs.libuv.org/en/v1.x/signal.html) from libuv to learn more about how `SIGINT`, `SIGBREAK` and others are handled on Windows. Also, see Node.js documentation of [Process Signal Events](https://nodejs.org/api/process.html#process_signal_events)
+> warning **警告** 由于固有的平台限制，NestJS 在 Windows 上对应用程序关闭钩子的支持有限。你可以预期 `SIGINT` 会工作，`SIGBREAK` 也会，并且在某种程度上 `SIGHUP` 也会 - [阅读更多](https://nodejs.org/api/process.html#process_signal_events)。但是 `SIGTERM` 在 Windows 上永远无法工作，因为在任务管理器中终止进程是无条件的，"即应用程序无法检测或阻止它"。这里有一些来自 libuv 的[相关文档](https://docs.libuv.org/en/v1.x/signal.html)，以了解更多关于 `SIGINT`、`SIGBREAK` 和其他信号在 Windows 上如何处理的信息。另请参阅 Node.js 文档关于[进程信号事件](https://nodejs.org/api/process.html#process_signal_events)的部分。
 
-> info **Info** `enableShutdownHooks` consumes memory by starting listeners. In cases where you are running multiple Nest apps in a single Node process (e.g., when running parallel tests with Jest), Node may complain about excessive listener processes. For this reason, `enableShutdownHooks` is not enabled by default. Be aware of this condition when you are running multiple instances in a single Node process.
+> info **信息** `enableShutdownHooks` 通过启动监听器来消耗内存。在单个 Node 进程中运行多个 Nest 应用程序的情况下（例如，在使用 Jest 运行并行测试时），Node 可能会抱怨过多的监听器进程。因此，默认情况下未启用 `enableShutdownHooks`。在单个 Node 进程中运行多个实例时，请注意此情况。
 
-When the application receives a termination signal it will call any registered `onModuleDestroy()`, `beforeApplicationShutdown()`, then `onApplicationShutdown()` methods (in the sequence described above) with the corresponding signal as the first parameter. If a registered function awaits an asynchronous call (returns a promise), Nest will not continue in the sequence until the promise is resolved or rejected.
+当应用程序收到终止信号时，它将使用相应的信号作为第一个参数，按照上述顺序调用任何已注册的 `onModuleDestroy()`、`beforeApplicationShutdown()`，然后 `onApplicationShutdown()` 方法。如果注册的函数等待异步调用（返回一个 promise），Nest 将不会继续执行序列，直到该 promise 被 resolved 或 rejected。
 
 ```typescript
 @@filename()
 @Injectable()
 class UsersService implements OnApplicationShutdown {
   onApplicationShutdown(signal: string) {
-    console.log(signal); // e.g. "SIGINT"
+    console.log(signal); // 例如 "SIGINT"
   }
 }
 @@switch
 @Injectable()
 class UsersService implements OnApplicationShutdown {
   onApplicationShutdown(signal) {
-    console.log(signal); // e.g. "SIGINT"
+    console.log(signal); // 例如 "SIGINT"
   }
 }
 ```
 
-> info **Info** Calling `app.close()` doesn't terminate the Node process but only triggers the `onModuleDestroy()` and `onApplicationShutdown()` hooks, so if there are some intervals, long-running background tasks, etc. the process won't be automatically terminated.
+> info **信息** 调用 `app.close()` 不会终止 Node 进程，只会触发 `onModuleDestroy()` 和 `onApplicationShutdown()` 钩子，因此如果有一些间隔、长时间运行的后台任务等，进程不会自动终止。

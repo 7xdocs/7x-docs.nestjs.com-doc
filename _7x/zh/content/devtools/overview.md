@@ -1,8 +1,8 @@
-### Overview
+### 概述
 
-> info **Hint** This chapter covers the Nest Devtools integration with the Nest framework. If you are looking for the Devtools application, please visit the [Devtools](https://devtools.nestjs.com) website.
+> info **提示** 本章介绍 Nest Devtools 与 Nest 框架的集成。如果您正在寻找 Devtools 应用程序，请访问 [Devtools](https://devtools.nestjs.com) 网站。
 
-To start debugging your local application, open up the `main.ts` file and make sure to set the `snapshot` attribute to `true` in the application options object, as follows:
+要开始调试本地应用程序，请打开 `main.ts` 文件，并确保在应用程序选项对象中将 `snapshot` 属性设置为 `true`，如下所示：
 
 ```typescript
 async function bootstrap() {
@@ -13,17 +13,17 @@ async function bootstrap() {
 }
 ```
 
-This will instruct the framework to collect necessary metadata that will let Nest Devtools visualize your application's graph.
+这将指示框架收集必要的元数据，以便 Nest Devtools 可视化您的应用程序图。
 
-Next up, let's install the required dependency:
+接下来，让我们安装所需的依赖项：
 
 ```bash
 $ npm i @nestjs/devtools-integration
 ```
 
-> warning **Warning** If you're using `@nestjs/graphql` package in your application, make sure to install the latest version (`npm i @nestjs/graphql@11`).
+> warning **警告** 如果您的应用程序中使用了 `@nestjs/graphql` 包，请确保安装最新版本（`npm i @nestjs/graphql@11`）。
 
-With this dependency in place, let's open up the `app.module.ts` file and import the `DevtoolsModule` that we just installed:
+安装好这个依赖项后，打开 `app.module.ts` 文件并导入我们刚刚安装的 `DevtoolsModule`：
 
 ```typescript
 @Module({
@@ -38,35 +38,35 @@ With this dependency in place, let's open up the `app.module.ts` file and import
 export class AppModule {}
 ```
 
-> warning **Warning** The reason we are checking the `NODE_ENV` environment variable here is that you should never use this module in production!
+> warning **警告** 我们在这里检查 `NODE_ENV` 环境变量的原因是，您绝不应在生产环境中使用此模块！
 
-Once the `DevtoolsModule` is imported and your application is up and running (`npm run start:dev`), you should be able to navigate to [Devtools](https://devtools.nestjs.com) URL and see the instrospected graph.
+一旦导入了 `DevtoolsModule` 并且您的应用程序已启动运行（`npm run start:dev`），您应该能够导航到 [Devtools](https://devtools.nestjs.com) 网址并看到 introspected 图。
 
 <figure><img src="/assets/devtools/modules-graph.png" /></figure>
 
-> info **Hint** As you can see on the screenshot above, every module connects to the `InternalCoreModule`. `InternalCoreModule` is a global module that is always imported into the root module. Since it's registered as a global node, Nest automatically creates edges between all of the modules and the `InternalCoreModule` node. Now, if you want to hide global modules from the graph, you can use the "**Hide global modules**" checkbox (in the sidebar).
+> info **提示** 正如您在上面的截图中看到的，每个模块都连接到 `InternalCoreModule`。`InternalCoreModule` 是一个全局模块，总是会导入到根模块中。由于它被注册为全局节点，Nest 会自动在所有模块和 `InternalCoreModule` 节点之间创建连接。现在，如果您想从图中隐藏全局模块，可以使用（侧边栏中的）"**隐藏全局模块**"复选框。
 
-So as we can see, `DevtoolsModule` makes your application expose an additional HTTP server (on port 8000) that the Devtools application will use to introspect your app.
+由此可见，`DevtoolsModule` 使您的应用程序暴露一个额外的 HTTP 服务器（在 8000 端口上），Devtools 应用程序将使用该服务器来 introspect 您的应用。
 
-Just to double-check that everything works as expected, change the graph view to "Classes". You should see the following screen:
+为了再次确认一切正常工作，将图视图切换到“Classes”。您应该会看到以下屏幕：
 
 <figure><img src="/assets/devtools/classes-graph.png" /></figure>
 
-To focus on a specific node, click on the rectangle and the graph will show a popup window with the **"Focus"** button. You can also use the search bar (located in the sidebar) to find a specific node.
+要聚焦于特定节点，请点击该矩形，图将显示一个带有“聚焦”按钮的弹出窗口。您也可以使用（位于侧边栏中的）搜索栏来查找特定节点。
 
-> info **Hint** If you click on the **Inspect** button, application will take you to the `/debug` page with that specific node selected.
+> info **提示** 如果您点击“检查”按钮，应用程序将带您进入 `/debug` 页面，并选中该特定节点。
 
 <figure><img src="/assets/devtools/node-popup.png" /></figure>
 
-> info **Hint** To export a graph as an image, click on the **Export as PNG** button in the right corner of the graph.
+> info **提示** 要将图导出为图像，请点击图右上角的“导出为 PNG”按钮。
 
-Using the form controls located in the sidebar (on the left), you can control edges proximity to, for example, visualize a specific application sub-tree:
+使用位于（左侧）侧边栏中的表单控件，您可以控制连接的接近程度，例如，可视化特定的应用程序子树：
 
 <figure><img src="/assets/devtools/subtree-view.png" /></figure>
 
-This can be particularly useful when you have **new developers** on your team and you want to show them how your application is structured. You can also use this feature to visualize a specific module (e.g. `TasksModule`) and all of its dependencies, which can come in handy when you're breaking down a large application into smaller modules (for example, individual micro-services).
+当您的团队中有**新开发人员**，并且您想向他们展示应用程序的结构时，这会特别有用。您也可以使用此功能来可视化特定模块（例如 `TasksModule`）及其所有依赖项，这在您将大型应用程序拆分为较小的模块（例如，单个微服务）时会很方便。
 
-You can watch this video to see the **Graph Explorer** feature in action:
+您可以观看此视频，了解“图浏览器”功能的实际应用：
 
 <figure>
   <iframe
@@ -80,13 +80,13 @@ You can watch this video to see the **Graph Explorer** feature in action:
   ></iframe>
 </figure>
 
-#### Investigating the "Cannot resolve dependency" error
+#### 调查“无法解析依赖项”错误
 
-> info **Note** This feature is supported for `@nestjs/core` >= `v9.3.10`.
+> info **注意** 此功能支持 `@nestjs/core` >= `v9.3.10`。
 
-Probably the most common error message you might have seen is about Nest not being able to resolve dependencies of a provider. Using Nest Devtools, you can effortlessly identify the issue and learn how to resolve it.
+您可能见过的最常见的错误消息之一是关于 Nest 无法解析提供者的依赖项。使用 Nest Devtools，您可以轻松识别问题并了解如何解决它。
 
-First, open up the `main.ts` file and update the `bootstrap()` call, as follows:
+首先，打开 `main.ts` 文件并更新 `bootstrap()` 调用，如下所示：
 
 ```typescript
 bootstrap().catch((err) => {
@@ -95,60 +95,60 @@ bootstrap().catch((err) => {
 });
 ```
 
-Also, make sure to set the `abortOnError` to `false`:
+同时，确保将 `abortOnError` 设置为 `false`：
 
 ```typescript
 const app = await NestFactory.create(AppModule, {
   snapshot: true,
-  abortOnError: false, // <--- THIS
+  abortOnError: false, // <--- 这里
 });
 ```
 
-Now every time your application fails to bootstrap due to the **"Cannot resolve dependency"** error, you'll find the `graph.json` (that represents a partial graph) file in the root directory. You can then drag & drop this file into Devtools (make sure to switch the current mode from "Interactive" to "Preview"):
+现在，每当您的应用程序因“无法解析依赖项”错误而启动失败时，您会在根目录中找到 `graph.json`（代表部分图）文件。然后，您可以将此文件拖放到 Devtools 中（确保将当前模式从“交互式”切换到“预览”）：
 
 <figure><img src="/assets/devtools/drag-and-drop.png" /></figure>
 
-Upon successful upload, you should see the following graph & dialog window:
+成功上传后，您应该会看到以下图和对话框窗口：
 
 <figure><img src="/assets/devtools/partial-graph-modules-view.png" /></figure>
 
-As you can see, the highlighted `TasksModule` is the one we should look into. Also, in the dialog window you can already see some instructions on how to fix this issue.
+如您所见，高亮显示的 `TasksModule` 是我们应该查看的模块。此外，在对话框窗口中，您已经可以看到一些关于如何修复此问题的说明。
 
-If we switch to the "Classes" view instead, that's what we'll see:
+如果我们切换到“Classes”视图，会看到以下内容：
 
 <figure><img src="/assets/devtools/partial-graph-classes-view.png" /></figure>
 
-This graph illustrates that the `DiagnosticsService` which we want to inject into the `TasksService` was not found in the context of the `TasksModule` module, and we should likely just import the `DiagnosticsModule` into the `TasksModule` module to fix this up!
+此图表明，我们想要注入到 `TasksService` 中的 `DiagnosticsService` 在 `TasksModule` 模块的上下文中未找到，我们可能只需将 `DiagnosticsModule` 导入到 `TasksModule` 模块中即可解决此问题！
 
-#### Routes explorer
+#### 路由浏览器
 
-When you navigate to the **Routes explorer** page, you should see all of the registered entrypoints:
+当您导航到“路由浏览器”页面时，您应该会看到所有已注册的入口点：
 
 <figure><img src="/assets/devtools/routes.png" /></figure>
 
-> info **Hint** This page shows not only HTTP routes, but also all of the other entrypoints (e.g. WebSockets, gRPC, GraphQL resolvers etc.).
+> info **提示** 此页面不仅显示 HTTP 路由，还显示所有其他入口点（例如 WebSockets、gRPC、GraphQL 解析器等）。
 
-Entrypoints are grouped by their host controllers. You can also use the search bar to find a specific entrypoint.
+入口点按其宿主控制器分组。您也可以使用搜索栏查找特定的入口点。
 
-If you click on a specific entrypoint, **a flow graph** will be displayed. This graph shows the execution flow of the entrypoint (e.g. guards, interceptors, pipes, etc. bound to this route). This is particularly useful when you want to understand how the request/response cycle looks for a specific route, or when troubleshooting why a specific guard/interceptor/pipe is not being executed.
+如果您点击特定的入口点，将显示**流程图**。此图显示入口点的执行流程（例如，绑定到此路由的守卫、拦截器、管道等）。当您想了解特定路由的请求/响应周期是什么样的，或者排查为什么特定的守卫/拦截器/管道没有被执行时，这特别有用。
 
-#### Sandbox
+#### 沙箱
 
-To execute JavaScript code on the fly & interact with your application in real-time, navigate to the **Sandbox** page:
+要实时执行 JavaScript 代码并与您的应用程序交互，请导航到“沙箱”页面：
 
 <figure><img src="/assets/devtools/sandbox.png" /></figure>
 
-The playground can be used to test and debug API endpoints in **real-time**, allowing developers to quickly identify and fix issues without using, for example, an HTTP client. We can also bypass the authentication layer, and so we no longer need that extra step of logging in, or even a special user account for testing purposes. For event-driven applications, we can also trigger events directly from the playground, and see how the application reacts to them.
+该 playground 可用于**实时**测试和调试 API 端点，使开发人员能够快速识别和修复问题，而无需使用例如 HTTP 客户端。我们还可以绕过身份验证层，因此不再需要额外的登录步骤，甚至不需要专门的测试用户账户。对于事件驱动的应用程序，我们也可以直接从 playground 触发事件，并查看应用程序的反应。
 
-Anything that gets logged down is streamlined to the playground's console, so we can easily see what's going on.
+所有记录的内容都会流转到 playground 的控制台，因此我们可以轻松了解正在发生的事情。
 
-Just execute the code **on the fly** and see the results instantly, without having to rebuild the application and restart the server.
+只需**实时**执行代码并立即查看结果，而无需重新构建应用程序和重启服务器。
 
 <figure><img src="/assets/devtools/sandbox-table.png" /></figure>
 
-> info **Hint** To pretty display an array of objects, use the `console.table()` (or just `table()`) function.
+> info **提示** 要美观地显示对象数组，请使用 `console.table()`（或直接使用 `table()`）函数。
 
-You can watch this video to see the **Interactive Playground** feature in action:
+您可以观看此视频，了解“交互式 Playground”功能的实际应用：
 
 <figure>
   <iframe
@@ -162,37 +162,37 @@ You can watch this video to see the **Interactive Playground** feature in action
   ></iframe>
 </figure>
 
-#### Bootstrap performance analyzer
+#### 启动性能分析器
 
-To see a list of all class nodes (controllers, providers, enhancers, etc.) and their corresponding instantiation times, navigate to the **Bootstrap performance** page:
+要查看所有类节点（控制器、提供者、增强器等）及其相应的实例化时间，请导航到“启动性能”页面：
 
 <figure><img src="/assets/devtools/bootstrap-performance.png" /></figure>
 
-This page is particularly useful when you want to identify the slowest parts of your application's bootstrap process (e.g. when you want to optimize the application's startup time which is crucial for, for example, serverless environments).
+当您想识别应用程序启动过程中最慢的部分时（例如，当您想优化应用程序的启动时间时，这对于例如无服务器环境至关重要），此页面特别有用。
 
-#### Audit
+#### 审计
 
-To see the auto-generated audit - errors/warnings/hints that the application came up with while analyzing your serialized graph, navigate to the **Audit** page:
+要查看应用程序在分析序列化图时自动生成的审计（错误/警告/提示），请导航到“审计”页面：
 
 <figure><img src="/assets/devtools/audit.png" /></figure>
 
-> info **Hint** The screenshot above doesn't show all of the available audit rules.
+> info **提示** 上面的截图并未显示所有可用的审计规则。
 
-This page comes in handy when you want to identify potential issues in your application.
+当您想识别应用程序中的潜在问题时，此页面会很有用。
 
-#### Preview static files
+#### 预览静态文件
 
-To save a serialized graph to a file, use the following code:
+要将序列化图保存到文件，请使用以下代码：
 
 ```typescript
-await app.listen(process.env.PORT ?? 3000); // OR await app.init()
+await app.listen(process.env.PORT ?? 3000); // 或 await app.init()
 fs.writeFileSync('./graph.json', app.get(SerializedGraph).toString());
 ```
 
-> info **Hint** `SerializedGraph` is exported from the `@nestjs/core` package.
+> info **提示** `SerializedGraph` 从 `@nestjs/core` 包导出。
 
-Then you can drag and drop/upload this file:
+然后您可以拖放/上传此文件：
 
 <figure><img src="/assets/devtools/drag-and-drop.png" /></figure>
 
-This is helpful when you want to share your graph with someone else (e.g., co-worker), or when you want to analyze it offline.
+当您想与其他人（例如同事）共享您的图，或者想离线分析它时，这会很有帮助。

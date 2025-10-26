@@ -18,110 +18,110 @@ export class MenuComponent implements OnInit {
   isSidebarOpened = true;
   readonly items = [
     {
-      title: 'Introduction',
+      title: '介绍',
       isOpened: false,
       path: '/',
     },
     {
-      title: 'Overview',
+      title: '概述',
       isOpened: true,
       children: [
-        { title: 'First steps', path: '/first-steps' },
-        { title: 'Controllers', path: '/controllers' },
-        { title: 'Providers', path: '/providers' },
-        { title: 'Modules', path: '/modules' },
-        { title: 'Middleware', path: '/middleware' },
-        { title: 'Exception filters', path: '/exception-filters' },
-        { title: 'Pipes', path: '/pipes' },
-        { title: 'Guards', path: '/guards' },
-        { title: 'Interceptors', path: '/interceptors' },
-        { title: 'Custom decorators', path: '/custom-decorators' },
+        { title: '第一步', path: '/first-steps' },
+        { title: '控制器', path: '/controllers' },
+        { title: '提供者', path: '/providers' },
+        { title: '模块', path: '/modules' },
+        { title: '中间件', path: '/middleware' },
+        { title: '异常过滤器', path: '/exception-filters' },
+        { title: '管道', path: '/pipes' },
+        { title: '守卫', path: '/guards' },
+        { title: '拦截器', path: '/interceptors' },
+        { title: '自定义路由装饰器', path: '/custom-decorators' },
       ],
     },
     {
-      title: 'Fundamentals',
+      title: '基础',
       isOpened: false,
       children: [
-        { title: 'Custom providers', path: '/fundamentals/custom-providers' },
+        { title: '自定义提供者', path: '/fundamentals/custom-providers' },
         {
-          title: 'Asynchronous providers',
+          title: '异步提供者',
           path: '/fundamentals/async-providers',
         },
         {
-          title: 'Dynamic modules',
+          title: '动态模块',
           path: '/fundamentals/dynamic-modules',
         },
         {
-          title: 'Injection scopes',
+          title: '注入作用域',
           path: '/fundamentals/injection-scopes',
         },
         {
-          title: 'Circular dependency',
+          title: '循环依赖',
           path: '/fundamentals/circular-dependency',
         },
         {
-          title: 'Module reference',
+          title: '模块引用',
           path: '/fundamentals/module-ref',
         },
         {
-          title: 'Lazy-loading modules',
+          title: '延迟加载模块',
           path: '/fundamentals/lazy-loading-modules',
         },
         {
-          title: 'Execution context',
+          title: '执行上下文',
           path: '/fundamentals/execution-context',
         },
         {
-          title: 'Lifecycle events',
+          title: '生命周期事件',
           path: '/fundamentals/lifecycle-events',
         },
         {
-          title: 'Platform agnosticism',
+          title: '平台无关性',
           path: '/fundamentals/platform-agnosticism',
         },
-        { title: 'Testing', path: '/fundamentals/testing' },
+        { title: '测试', path: '/fundamentals/testing' },
       ],
     },
     {
-      title: 'Techniques',
+      title: '技术',
       isOpened: false,
       children: [
-        { title: 'Configuration', path: '/techniques/configuration' },
-        { title: 'Database', path: '/techniques/database' },
+        { title: '配置', path: '/techniques/configuration' },
+        { title: '数据库', path: '/techniques/database' },
         { title: 'Mongo', path: '/techniques/mongodb' },
-        { title: 'Validation', path: '/techniques/validation' },
-        { title: 'Caching', path: '/techniques/caching' },
-        { title: 'Serialization', path: '/techniques/serialization' },
-        { title: 'Versioning', path: '/techniques/versioning' },
-        { title: 'Task scheduling', path: '/techniques/task-scheduling' },
-        { title: 'Queues', path: '/techniques/queues' },
-        { title: 'Logging', path: '/techniques/logger' },
+        { title: '验证', path: '/techniques/validation' },
+        { title: '缓存', path: '/techniques/caching' },
+        { title: '序列化', path: '/techniques/serialization' },
+        { title: '版本控制', path: '/techniques/versioning' },
+        { title: '任务调度', path: '/techniques/task-scheduling' },
+        { title: '队列', path: '/techniques/queues' },
+        { title: '日志', path: '/techniques/logger' },
         { title: 'Cookies', path: '/techniques/cookies' },
-        { title: 'Events', path: '/techniques/events' },
-        { title: 'Compression', path: '/techniques/compression' },
-        { title: 'File upload', path: '/techniques/file-upload' },
-        { title: 'Streaming files', path: '/techniques/streaming-files' },
-        { title: 'HTTP module', path: '/techniques/http-module' },
+        { title: '事件', path: '/techniques/events' },
+        { title: '压缩', path: '/techniques/compression' },
+        { title: '文件上传', path: '/techniques/file-upload' },
+        { title: '文件流传输', path: '/techniques/streaming-files' },
+        { title: 'HTTP 模块', path: '/techniques/http-module' },
         { title: 'Session', path: '/techniques/session' },
-        { title: 'Model-View-Controller', path: '/techniques/mvc' },
-        { title: 'Performance (Fastify)', path: '/techniques/performance' },
-        { title: 'Server-Sent Events', path: '/techniques/server-sent-events' },
+        { title: 'MVC', path: '/techniques/mvc' },
+        { title: '性能 (Fastify)', path: '/techniques/performance' },
+        { title: '服务器发送事件', path: '/techniques/server-sent-events' },
       ],
     },
     {
-      title: 'Security',
+      title: '安全',
       isOpened: false,
       children: [
-        { title: 'Authentication', path: '/security/authentication' },
-        { title: 'Authorization', path: '/security/authorization' },
+        { title: '身份验证', path: '/security/authentication' },
+        { title: '授权', path: '/security/authorization' },
         {
-          title: 'Encryption and Hashing',
+          title: '加密和散列',
           path: '/security/encryption-and-hashing',
         },
         { title: 'Helmet', path: '/security/helmet' },
         { title: 'CORS', path: '/security/cors' },
-        { title: 'CSRF Protection', path: '/security/csrf' },
-        { title: 'Rate limiting', path: '/security/rate-limiting' },
+        { title: 'CSRF 保护', path: '/security/csrf' },
+        { title: '速率限制', path: '/security/rate-limiting' },
       ],
     },
     {
@@ -165,7 +165,7 @@ export class MenuComponent implements OnInit {
       ],
     },
     {
-      title: 'Microservices',
+      title: '微服务',
       isOpened: false,
       children: [
         { title: 'Overview', path: '/microservices/basics' },
@@ -189,17 +189,17 @@ export class MenuComponent implements OnInit {
       ],
     },
     {
-      title: 'Deployment',
+      title: '部署',
       isNew: true,
       path: '/deployment',
     },
     {
-      title: 'Standalone apps',
+      title: '独立应用',
       isOpened: false,
       path: '/standalone-applications',
     },
     {
-      title: 'CLI',
+      title: '命令行工具',
       isOpened: false,
       children: [
         { title: 'Overview', path: '/cli/overview' },
@@ -210,7 +210,7 @@ export class MenuComponent implements OnInit {
       ],
     },
     {
-      title: 'OpenAPI',
+      title: '开放 API',
       isOpened: false,
       children: [
         { title: 'Introduction', path: '/openapi/introduction' },
@@ -228,7 +228,7 @@ export class MenuComponent implements OnInit {
       ],
     },
     {
-      title: 'Recipes',
+      title: '使用诀窍',
       isOpened: false,
       children: [
         { title: 'REPL', path: '/recipes/repl' },
@@ -254,7 +254,7 @@ export class MenuComponent implements OnInit {
       ],
     },
     {
-      title: 'FAQ',
+      title: '常见问题',
       isOpened: false,
       children: [
         { title: 'Serverless', path: '/faq/serverless' },
@@ -276,7 +276,7 @@ export class MenuComponent implements OnInit {
       ],
     },
     {
-      title: 'Devtools',
+      title: '开发者工具',
       isOpened: false,
       children: [
         { title: 'Overview', path: '/devtools/overview' },
@@ -284,12 +284,12 @@ export class MenuComponent implements OnInit {
       ],
     },
     {
-      title: 'Migration guide',
+      title: '迁移指南',
       isOpened: false,
       path: '/migration-guide',
     },
     {
-      title: 'Official courses',
+      title: '官方课程',
       externalUrl: 'https://courses.nestjs.com/',
     },
     {
@@ -305,7 +305,7 @@ export class MenuComponent implements OnInit {
     //   externalUrl: 'https://nestjs.threadless.com/',
     // },
     {
-      title: 'Support us',
+      title: '支持我们',
       isOpened: false,
       path: '/support',
     },

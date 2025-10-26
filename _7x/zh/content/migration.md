@@ -1,24 +1,24 @@
-### Migration guide
+### 迁移指南
 
-This article offers a comprehensive guide for migrating from NestJS version 10 to version 11. To explore the new features introduced in v11, take a look at [this article](#). While the update includes a few minor breaking changes, they are unlikely to impact most users. You can review the complete list of breaking changes [here](#).
+本文提供了从 NestJS 版本 10 迁移到版本 11 的全面指南。要了解 v11 引入的新功能，请查看[这篇文章](#)。虽然此更新包含一些小的破坏性变更，但它们不太可能影响大多数用户。你可以在此处查看完整的破坏性变更列表[here](#)。
 
-#### Upgrading packages
+#### 升级包
 
-Although you can manually upgrade your packages, we recommend using [npm-check-updates (ncu)](https://npmjs.com/package/npm-check-updates) for a more streamlined process.
+虽然你可以手动升级你的包，但我们建议使用 [npm-check-updates (ncu)](https://npmjs.com/package/npm-check-updates) 以获得更简化的过程。
 
 #### Express v5
 
-After years of development, Express v5 was officially released in 2024 and became a stable version in 2025. With NestJS 11, Express v5 is now the default version integrated into the framework. While this update is seamless for most users, it’s important to be aware that Express v5 introduces some breaking changes. For detailed guidance, refer to the [Express v5 migration guide](https://expressjs.com/en/guide/migrating-5.html).
+经过多年的开发，Express v5 于 2024 年正式发布，并于 2025 年成为稳定版本。在 NestJS 11 中，Express v5 现在是框架内集成的默认版本。虽然此更新对大多数用户来说是无缝的，但务必注意 Express v5 引入了一些破坏性变更。有关详细指导，请参阅 [Express v5 迁移指南](https://expressjs.com/en/guide/migrating-5.html)。
 
-One of the most notable updates in Express v5 is the revised path route matching algorithm. The following changes have been introduced to how path strings are matched with incoming requests:
+Express v5 中最显著的更新之一是修订了路径路由匹配算法。以下是对路径字符串与传入请求匹配方式的变更：
 
-- The wildcard `*` must have a name, matching the behavior of parameters :, use `/*splat` or `/{{ '{' }}*splat&#125;` instead of `/*`
-- The optional character `?` is no longer supported, use braces instead: `/:file{{ '{' }}.:ext&#125;`.
-- Regexp characters are not supported.
-- Some characters have been reserved to avoid confusion during upgrade `(()[]?+!)`, use `\` to escape them.
-- Parameter names now support valid JavaScript identifiers, or quoted like `:"this"`.
+- 通配符 `*` 必须有一个名称，与参数 `:` 的行为相匹配，使用 `/*splat` 或 `/{{ '{' }}*splat&#125;` 而不是 `/*`
+- 不再支持可选字符 `?`，请改用花括号：`/:file{{ '{' }}.:ext&#125;`。
+- 不支持正则表达式字符。
+- 为避免升级过程中的混淆，保留了一些字符 `(()[]?+!)`，使用 `\` 对它们进行转义。
+- 参数名称现在支持有效的 JavaScript 标识符，或者使用引号，如 `:"this"`。
 
-That said, routes that previously worked in Express v4 may not work in Express v5. For example:
+也就是说，在 Express v4 中正常工作的路由在 Express v5 中可能无法工作。例如：
 
 ```typescript
 @Get('users/*')
@@ -29,7 +29,7 @@ findAll() {
 }
 ```
 
-To fix this issue, you can update the route to use a named wildcard:
+要修复此问题，你可以更新路由以使用命名通配符：
 
 ```typescript
 @Get('users/*splat')
@@ -38,9 +38,9 @@ findAll() {
 }
 ```
 
-> warning **Warning** Note that `*splat` is a named wildcard that matches any path without the root path. If you need to match the root path as well (`/users`), you can use `/users/{{ '{' }}*splat&#125;`, wrapping the wildcard in braces (optional group).
+> warning **警告** 请注意，`*splat` 是一个命名通配符，它匹配任何不包含根路径的路径。如果你还需要匹配根路径（`/users`），你可以使用 `/users/{{ '{' }}*splat&#125;`，将通配符包裹在花括号中（可选组）。
 
-Similarly, if you have a middleware that runs on all routes, you may need to update the path to use a named wildcard:
+类似地，如果你有一个在所有路由上运行的中间件，你可能需要更新路径以使用命名通配符：
 
 ```typescript
 // In NestJS 11, this will be automatically converted to a valid Express v5 route.
@@ -48,71 +48,71 @@ Similarly, if you have a middleware that runs on all routes, you may need to upd
 forRoutes('*'); // <-- This should not work in Express v5
 ```
 
-Instead, you can update the path to use a named wildcard:
+相反，你可以更新路径以使用命名通配符：
 
 ```typescript
 forRoutes('{*splat}'); // <-- This will work in Express v5
 ```
 
-Note that `{{ '{' }}*splat&#125;` is a named wildcard that matches any path including the root path. Outer braces make path optional.
+请注意，`{{ '{' }}*splat&#125;` 是一个命名通配符，它匹配包括根路径在内的任何路径。外层的花括号使路径变为可选。
 
 #### Fastify v5
 
-Fastify v5 was released in 2024 and is now the default version integrated into NestJS 11. This update should be seamless for most users; however, Fastify v5 introduces a few breaking changes, though these are unlikely to affect the majority of NestJS users. For more detailed information, refer to the [Fastify v5 migration guide](https://fastify.dev/docs/v5.1.x/Guides/Migration-Guide-V5/).
+Fastify v5 于 2024 年发布，现在是 NestJS 11 中集成的默认版本。此更新对大多数用户来说应该是无缝的；然而，Fastify v5 引入了一些破坏性变更，尽管这些不太可能影响大多数 NestJS 用户。更多详细信息，请参阅 [Fastify v5 迁移指南](https://fastify.dev/docs/v5.1.x/Guides/Migration-Guide-V5/)。
 
-> info **Hint** There have been no changes to path matching in Fastify v5, so you can continue using the wildcard syntax as you did before. The behavior remains the same, and routes defined with wildcards (like `*`) will still work as expected.
+> info **提示** Fastify v5 中的路径匹配没有变化，因此你可以像以前一样继续使用通配符语法。行为保持不变，使用通配符（如 `*`）定义的路由仍将按预期工作。
 
-#### Module resolution algorithm
+#### 模块解析算法
 
-Starting with NestJS 11, the module resolution algorithm has been improved to enhance performance and reduce memory usage for most applications. This change does not require any manual intervention, but there are some edge cases where the behavior may differ from previous versions.
+从 NestJS 11 开始，模块解析算法得到了改进，以提高大多数应用程序的性能并减少内存使用。此变更不需要任何手动干预，但在某些边缘情况下，其行为可能与先前版本不同。
 
-In NestJS v10 and earlier, dynamic modules were assigned a unique opaque key generated from the module's dynamic metadata. This key was used to identify the module in the module registry. For example, if you included `TypeOrmModule.forFeature([User])` in multiple modules, NestJS would deduplicate the modules and treat them as a single module node in the registry. This process is known as node deduplication.
+在 NestJS v10 及更早版本中，动态模块被分配了一个从模块的动态元数据生成的唯一不透明键。该键用于在模块注册表中识别模块。例如，如果你在多个模块中包含 `TypeOrmModule.forFeature([User])`，NestJS 将对模块进行去重，并在注册表中将它们视为单个模块节点。此过程称为节点去重。
 
-With the release of NestJS v11, we no longer generate predictable hashes for dynamic modules. Instead, object references are now used to determine if one module is equivalent to another. To share the same dynamic module across multiple modules, simply assign it to a variable and import it wherever needed. This new approach provides more flexibility and ensures that dynamic modules are handled more efficiently.
+随着 NestJS v11 的发布，我们不再为动态模块生成可预测的哈希值。现在，使用对象引用确定一个模块是否与另一个模块等效。要在多个模块之间共享相同的动态模块，只需将其分配给一个变量并在需要的地方导入它。这种新方法提供了更大的灵活性，并确保更有效地处理动态模块。
 
-#### Reflector type inference
+#### Reflector 类型推断
 
-NestJS 11 introduces several improvements to the `Reflector` class, enhancing its functionality and type inference for metadata values. These updates provide a more intuitive and robust experience when working with metadata.
+NestJS 11 引入了对 `Reflector` 类的几项改进，增强了其功能和对元数据值的类型推断。这些更新在使用元数据时提供了更直观和更健壮的体验。
 
-1. `getAllAndMerge` now returns an object rather than an array containing a single element when there is only one metadata entry, and the `value` is of type `object`. This change improves consistency when dealing with object-based metadata.
-2. The `getAllAndOverride` return type has been updated to `T | undefined` instead of `T`. This update better reflects the possibility of no metadata being found and ensures proper handling of undefined cases.
-3. The `ReflectableDecorator`'s transformed type argument is now properly inferred across all methods.
+1. 当只有一个元数据条目且 `value` 的类型为 `object` 时，`getAllAndMerge` 现在返回一个对象，而不是包含单个元素的数组。此变更提高了处理基于对象的元数据时的一致性。
+2. `getAllAndOverride` 的返回类型已更新为 `T | undefined` 而不是 `T`。此更新更好地反映了可能找不到元数据的情况，并确保正确处理 undefined 情况。
+3. `ReflectableDecorator` 的转换类型参数现在可以在所有方法中正确推断。
 
-These enhancements improve the overall developer experience by providing better type safety and handling of metadata in NestJS 11.
+这些增强功能通过提供更好的类型安全性和对元数据的处理，改善了 NestJS 11 的整体开发者体验。
 
-#### Lifecycle hooks execution order
+#### 生命周期钩子执行顺序
 
-Termination lifecycle hooks are now executed in the reverse order to their initialization counterparts. That said, hooks like `OnModuleDestroy`, `BeforeApplicationShutdown`, and `OnApplicationShutdown` are now executed in the reverse order.
+终止生命周期钩子现在按照其初始化对应钩子的相反顺序执行。也就是说，像 `OnModuleDestroy`、`BeforeApplicationShutdown` 和 `OnApplicationShutdown` 这样的钩子现在以相反的顺序执行。
 
-Imagine the following scenario:
+设想以下场景：
 
 ```plaintext
-// Where A, B, and C are modules and "->" represents the module dependency.
+// 其中 A、B 和 C 是模块，"->" 代表模块依赖关系。
 A -> B -> C
 ```
 
-In this case, the `OnModuleInit` hooks are executed in the following order:
+在这种情况下，`OnModuleInit` 钩子按以下顺序执行：
 
 ```plaintext
 C -> B -> A
 ```
 
-While the `OnModuleDestroy` hooks are executed in the reverse order:
+而 `OnModuleDestroy` 钩子以相反的顺序执行：
 
 ```plaintext
 A -> B -> C
 ```
 
-> info **Hint** Global modules are treated as if they depend on all other modules. This means that global modules are initialized first and destroyed last.
+> info **提示** 全局模块被视为依赖于所有其他模块。这意味着全局模块首先初始化，最后销毁。
 
-#### Cache module
+#### 缓存模块
 
-The `CacheModule` (from the `@nestjs/cache-manager` package) has been updated to support the latest version of the `cache-manager` package. This update brings a few breaking changes, including a migration to [Keyv](https://keyv.org/), which offers a unified interface for key-value storage across multiple backend stores through storage adapters.
+`CacheModule`（来自 `@nestjs/cache-manager` 包）已更新，以支持最新版本的 `cache-manager` 包。此更新带来了一些破坏性变更，包括迁移到 [Keyv](https://keyv.org/)，它通过存储适配器为多个后端存储提供了统一的键值存储接口。
 
-The key difference between the previous version and the new version lies in the configuration of external stores. In the previous version, to register a Redis store, you would have likely configured it like this:
+先前版本和新版本之间的关键区别在于外部存储的配置。在先前版本中，要注册 Redis 存储，你可能会这样配置：
 
 ```ts
-// Old version - no longer supported
+// 旧版本 - 不再受支持
 CacheModule.registerAsync({
   useFactory: async () => {
     const store = await redisStore({
@@ -129,10 +129,10 @@ CacheModule.registerAsync({
 }),
 ```
 
-In the new version, you should use the `Keyv` adapter to configure the store:
+在新版本中，你应该使用 `Keyv` 适配器来配置存储：
 
 ```ts
-// New version - supported
+// 新版本 - 受支持
 CacheModule.registerAsync({
   useFactory: async () => {
     return {
@@ -144,24 +144,24 @@ CacheModule.registerAsync({
 }),
 ```
 
-Where `KeyvRedis` is imported from the `@keyv/redis` package. See the [Caching documentation](/techniques/caching) to learn more.
+其中 `KeyvRedis` 是从 `@keyv/redis` 包导入的。请参阅 [缓存文档](/techniques/caching) 以了解更多信息。
 
-#### Config module
+#### 配置模块
 
-If you're using the `ConfigModule` from the `@nestjs/config` package, be aware of several breaking changes introduced in `@nestjs/config@4.0.0`. Most notably, the order in which configuration variables are read by the `ConfigService#get` method has been updated. The new order is:
+如果你使用来自 `@nestjs/config` 包的 `ConfigModule`，请注意 `@nestjs/config@4.0.0` 中引入的几个破坏性变更。最值得注意的是，`ConfigService#get` 方法读取配置变量的顺序已更新。新的顺序是：
 
-- Internal configuration (config namespaces and custom config files)
-- Validated environment variables (if validation is enabled and a schema is provided)
-- The `process.env` object
+- 内部配置（配置命名空间和自定义配置文件）
+- 已验证的环境变量（如果启用了验证并提供了模式）
+- `process.env` 对象
 
-Previously, validated environment variables and the `process.env` object were read first, preventing them from being overridden by internal configuration. With this update, internal configuration will now always take precedence over environment variables.
+以前，已验证的环境变量和 `process.env` 对象首先被读取，这阻止了它们被内部配置覆盖。通过此次更新，内部配置现在将始终优先于环境变量。
 
-Additionally, the `ignoreEnvVars` configuration option, which previously allowed disabling validation of the `process.env` object, has been deprecated. Instead, use the `validatePredefined` option (set to `false` to disable validation of predefined environment variables). Predefined environment variables refer to `process.env` variables that were set before the module was imported. For example, if you start your application with `PORT=3000 node main.js`, the `PORT` variable is considered predefined. However, variables loaded by the `ConfigModule` from a `.env` file are not classified as predefined.
+此外，先前允许禁用 `process.env` 对象验证的 `ignoreEnvVars` 配置选项已被弃用。相反，请使用 `validatePredefined` 选项（设置为 `false` 以禁用对预定义环境变量的验证）。预定义环境变量是指在导入模块之前设置的 `process.env` 变量。例如，如果你使用 `PORT=3000 node main.js` 启动应用程序，则 `PORT` 变量被视为预定义的。但是，由 `ConfigModule` 从 `.env` 文件加载的变量不被归类为预定义的。
 
-A new `skipProcessEnv` option has also been introduced. This option allows you to prevent the `ConfigService#get` method from accessing the `process.env` object entirely, which can be helpful when you want to restrict the service from reading environment variables directly.
+还引入了一个新的 `skipProcessEnv` 选项。此选项允许你完全阻止 `ConfigService#get` 方法访问 `process.env` 对象，当你想限制服务直接读取环境变量时，这会很有帮助。
 
-#### Node.js v16 no longer supported
+#### 不再支持 Node.js v16
 
-Starting with NestJS 11, Node.js v16 is no longer supported, as it reached its end-of-life (EOL) on September 11, 2023. NestJS 11 now requires **Node.js v20 or higher**.
+从 NestJS 11 开始，不再支持 Node.js v16，因为它已于 2023 年 9 月 11 日终止支持 (EOL)。NestJS 11 现在要求 **Node.js v20 或更高版本**。
 
-To ensure the best experience, we strongly recommend using the latest LTS version of Node.js.
+为确保最佳体验，我们强烈建议使用最新的 Node.js LTS 版本。

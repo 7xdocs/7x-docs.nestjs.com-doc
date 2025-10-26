@@ -32,7 +32,7 @@ const routes: Routes = [
       {
         path: 'first-steps',
         component: FirstStepsComponent,
-        data: { title: 'First steps' },
+        data: { title: '第一步' },
       },
       {
         path: 'controllers',

@@ -1,10 +1,10 @@
-### CI/CD integration
+### CI/CD 集成
 
-> info **Hint** This chapter covers the Nest Devtools integration with the Nest framework. If you are looking for the Devtools application, please visit the [Devtools](https://devtools.nestjs.com) website.
+> info **提示** 本章介绍 Nest 开发工具与 Nest 框架的集成。如果您正在寻找开发工具应用程序，请访问 [开发工具](https://devtools.nestjs.com) 网站。
 
-CI/CD integration is available for users with the **[Enterprise](/settings)** plan.
+CI/CD 集成仅对拥有 **[企业版](/settings)** 计划的用户开放。
 
-You can watch this video to learn why & how CI/CD integration can help you:
+您可以观看以下视频，了解 CI/CD 集成为何以及如何为您提供帮助：
 
 <figure>
   <iframe
@@ -18,9 +18,9 @@ You can watch this video to learn why & how CI/CD integration can help you:
   ></iframe>
 </figure>
 
-#### Publishing graphs
+#### 发布图形
 
-Let's first configure the application bootstrap file (`main.ts`) to use the `GraphPublisher` class (exported from the `@nestjs/devtools-integration` - see previous chapter for more details), as follows:
+首先，我们来配置应用程序启动文件（`main.ts`），以使用 `GraphPublisher` 类（从 `@nestjs/devtools-integration` 导出 - 更多细节请参见上一章），配置如下：
 
 ```typescript
 async function bootstrap() {
@@ -45,47 +45,47 @@ async function bootstrap() {
 }
 ```
 
-As we can see, we're using the `GraphPublisher` here to publish our serialized graph to the centralized registry. The `PUBLISH_GRAPH` is a custom environment variable that will let us control whether the graph should be published (CI/CD workflow), or not (regular application bootstrap). Also, we set the `preview` attribute here to `true`. With this flag enabled, our application will bootstrap in the preview mode - which basically means that constructors (and lifecycle hooks) of all controllers, enhancers, and providers in our application will not be executed. Note - this isn't **required**, but makes things simpler for us since in this case we won't really have to connect to the database etc. when running our application in the CI/CD pipeline.
+如我们所见，这里我们使用 `GraphPublisher` 将序列化的图形发布到中央注册表。`PUBLISH_GRAPH` 是一个自定义环境变量，用于控制是否应该发布图形（CI/CD 工作流），还是不发布（常规应用程序启动）。此外，我们在这里将 `preview` 属性设置为 `true`。启用此标志后，我们的应用程序将在预览模式下启动——这基本上意味着应用程序中所有控制器、增强器和提供者的构造函数（以及生命周期钩子）都不会执行。注意——这不是**必需的**，但会让我们的工作更简单，因为在这种情况下，我们在 CI/CD 流水线中运行应用程序时，实际上不必连接到数据库等。
 
-The `publishOptions` object will vary depending on the CI/CD provider you're using. We will provide you with instructions for the most popular CI/CD providers below, in later sections.
+`publishOptions` 对象会因您使用的 CI/CD 提供商而异。我们将在后面的部分中为您提供最流行的 CI/CD 提供商的说明。
 
-Once the graph is successfully published, you'll see the following output in your workflow view:
+图形成功发布后，您将在工作流视图中看到以下输出：
 
 <figure><img src="/assets/devtools/graph-published-terminal.png" /></figure>
 
-Every time our graph is published, we should see a new entry in the project's corresponding page:
+每次发布图形时，我们都应该在项目的对应页面中看到一个新条目：
 
 <figure><img src="/assets/devtools/project.png" /></figure>
 
-#### Reports
+#### 报告
 
-Devtools generate a report for every build **IF** there's a corresponding snapshot already stored in the centralized registry. So for example, if you create a PR against the `master` branch for which the graph was already published - then the application will be able to detect differences and generate a report. Otherwise, the report will not be generated.
+如果中央注册表中已存储相应的快照，开发工具会为每个构建生成报告。例如，如果您针对已发布图形的 `master` 分支创建一个 PR，那么应用程序将能够检测差异并生成报告。否则，将不会生成报告。
 
-To see reports, navigate to the project's corresponding page (see organizations).
+要查看报告，请导航到项目的对应页面（参见组织）。
 
 <figure><img src="/assets/devtools/report.png" /></figure>
 
-This is particularly helpful in identifying changes that may have gone unnoticed during code reviews. For instance, let's say someone has changed the scope of a **deeply nested provider**. This change might not be immediately obvious to the reviewer, but with Devtools, we can easily spot such changes and make sure that they're intentional. Or if we remove a guard from a specific endpoint, it will show up as affected in the report. Now if we didn't have integration or e2e tests for that route, we might not notice that it's no longer protected, and by the time we do, it could be too late.
+这对于识别代码审查过程中可能被忽视的变更特别有帮助。例如，假设有人更改了**深度嵌套的提供者**的作用域。这种变更可能不会立即被审查者发现，但通过开发工具，我们可以轻松发现此类变更，并确保它们是有意为之的。或者，如果我们从特定端点移除了一个守卫，它将在报告中显示为受影响的项。如果我们没有为该路由编写集成测试或端到端测试，我们可能不会注意到它不再受保护，而当我们发现时，可能已经太晚了。
 
-Similarly, if we're working on a **large codebase** and we modify a module to be global, we'll see how many edges were added to the graph, and this - in most cases - is a sign that we're doing something wrong.
+同样，如果我们在**大型代码库**中工作，并将一个模块修改为全局模块，我们会看到图形中添加了多少条边，而在大多数情况下，这是我们做错了事情的信号。
 
-#### Build preview
+#### 构建预览
 
-For every published graph we can go back in time and preview how it looked before by clicking at the **Preview** button. Furthermore, if the report was generated, we should see the differences highlighted on our graph:
+对于每个已发布的图形，我们可以通过点击**预览**按钮回到过去，查看它之前的样子。此外，如果生成了报告，我们应该会在图形上看到突出显示的差异：
 
-- green nodes represent added elements
-- light white nodes represent updated elements
-- red nodes represent deleted elements
+- 绿色节点表示新增的元素
+- 浅白色节点表示更新的元素
+- 红色节点表示删除的元素
 
-See screenshot below:
+参见下面的截图：
 
 <figure><img src="/assets/devtools/nodes-selection.png" /></figure>
 
-The ability to go back in time lets you investigate and troubleshoot the issue by comparing the current graph with the previous one. Depending on how you set things up, every pull request (or even every commit) will have a corresponding snapshot in the registry, so you can easily go back in time and see what changed. Think of Devtools as a Git but with an understanding of how Nest constructs your application graph, and with the ability to **visualize** it.
+回溯功能使您能够通过比较当前图形和之前的图形来调查和排查问题。根据您的设置方式，每个拉取请求（甚至每个提交）在注册表中都会有相应的快照，因此您可以轻松回溯并查看发生了哪些变更。可以将开发工具视为具有理解 Nest 如何构建应用程序图形能力的 Git，并且能够**可视化**它。
 
-#### Integrations: GitHub Actions
+#### 集成：GitHub Actions
 
-First let's start from creating a new GitHub workflow in the `.github/workflows` directory in our project and call it, for example, `publish-graph.yml`. Inside this file, let's use the following definition:
+首先，我们在项目的 `.github/workflows` 目录中创建一个新的 GitHub 工作流，例如将其命名为 `publish-graph.yml`。在该文件中，我们使用以下定义：
 
 ```yaml
 name: Devtools
@@ -130,13 +130,13 @@ jobs:
           TARGET_SHA: {{ '${{' }} github.event.pull_request.base.sha {{ '}}' }}
 ```
 
-Ideally, `DEVTOOLS_API_KEY` environment variable should be retrieved from GitHub Secrets, read more [here](https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository) .
+理想情况下，`DEVTOOLS_API_KEY` 环境变量应从 GitHub 密钥中获取，更多信息请参见 [此处](https://docs.github.com/en/actions/security-guides/encrypted-secrets#creating-encrypted-secrets-for-a-repository)。
 
-This workflow will run per each pull request that's targeting the `master` branch OR in case there's a direct commit to the `master` branch. Feel free to align this configuration to whatever your project needs. What's essential here is that we provide necessary environment variables for our `GraphPublisher` class (to run).
+此工作流将在每个针对 `master` 分支的拉取请求，或者直接提交到 `master` 分支时运行。您可以根据项目需求调整此配置。这里至关重要的是，我们为 `GraphPublisher` 类（运行时）提供了必要的环境变量。
 
-However, there's one variable that needs to be updated before we can start using this workflow - `DEVTOOLS_API_KEY`. We can generate an API key dedicated for our project on this [page](https://devtools.nestjs.com/settings/manage-api-keys).
+但是，在开始使用此工作流之前，有一个变量需要更新——`DEVTOOLS_API_KEY`。我们可以在 [此页面](https://devtools.nestjs.com/settings/manage-api-keys) 上为我们的项目生成一个专用的 API 密钥。
 
-Lastly, let's navigate to the `main.ts` file again and update the `publishOptions` object we previously left empty.
+最后，让我们再次导航到 `main.ts` 文件，并更新我们之前留空的 `publishOptions` 对象。
 
 ```typescript
 const publishOptions = {
@@ -150,17 +150,17 @@ const publishOptions = {
 };
 ```
 
-For the best developer experience, make sure to integrate the **GitHub application** for your project by clicking on the "Integrate GitHub app" button (see screenshot below). Note - this isn't required.
+为了获得最佳的开发体验，请通过点击“集成 GitHub 应用”按钮为您的项目集成 **GitHub 应用**（参见下面的截图）。注意——这不是必需的。
 
 <figure><img src="/assets/devtools/integrate-github-app.png" /></figure>
 
-With this integration, you'll be able to see the status of the preview/report generation process right in your pull request:
+通过此集成，您将能够在拉取请求中直接查看预览/报告生成过程的状态：
 
 <figure><img src="/assets/devtools/actions-preview.png" /></figure>
 
-#### Integrations: Gitlab Pipelines
+#### 集成：Gitlab 流水线
 
-First let's start from creating a new Gitlab CI configuration file in the root directory of our project and call it, for example, `.gitlab-ci.yml`. Inside this file, let's use the following definition:
+首先，我们在项目的根目录中创建一个新的 Gitlab CI 配置文件，例如将其命名为 `.gitlab-ci.yml`。在该文件中，我们使用以下定义：
 
 ```typescript
 const publishOptions = {
@@ -174,13 +174,13 @@ const publishOptions = {
 };
 ```
 
-> info **Hint** Ideally, `DEVTOOLS_API_KEY` environment variable should be retrieved from secrets.
+> info **提示** 理想情况下，`DEVTOOLS_API_KEY` 环境变量应从密钥中获取。
 
-This workflow will run per each pull request that's targeting the `master` branch OR in case there's a direct commit to the `master` branch. Feel free to align this configuration to whatever your project needs. What's essential here is that we provide necessary environment variables for our `GraphPublisher` class (to run).
+此工作流将在每个针对 `master` 分支的拉取请求，或者直接提交到 `master` 分支时运行。您可以根据项目需求调整此配置。这里至关重要的是，我们为 `GraphPublisher` 类（运行时）提供了必要的环境变量。
 
-However, there's one variable (in this workflow definition) that needs to be updated before we can start using this workflow - `DEVTOOLS_API_KEY`. We can generate an API key dedicated for our project on this **page** .
+但是，在开始使用此工作流之前，有一个变量（在此工作流定义中）需要更新——`DEVTOOLS_API_KEY`。我们可以在**此页面**上为我们的项目生成一个专用的 API 密钥。
 
-Lastly, let's navigate to the `main.ts` file again and update the `publishOptions` object we previously left empty.
+最后，让我们再次导航到 `main.ts` 文件，并更新我们之前留空的 `publishOptions` 对象。
 
 ```yaml
 image: node:16
@@ -218,11 +218,11 @@ publish_graph:
     DEVTOOLS_API_KEY: 'CHANGE_THIS_TO_YOUR_API_KEY'
 ```
 
-#### Other CI/CD tools
+#### 其他 CI/CD 工具
 
-Nest Devtools CI/CD integration can be used with any CI/CD tool of your choice (e.g., [Bitbucket Pipelines](https://bitbucket.org/product/features/pipelines) , [CircleCI](https://circleci.com/), etc) so don't feel limited to providers we described here.
+Nest 开发工具的 CI/CD 集成可与您选择的任何 CI/CD 工具一起使用（例如 [Bitbucket Pipelines](https://bitbucket.org/product/features/pipelines)、[CircleCI](https://circleci.com/) 等），因此不要局限于我们这里描述的提供商。
 
-Look at the following `publishOptions` object configuration to understand what information is required to publish the graph for a given commit/build/PR.
+查看以下 `publishOptions` 对象配置，了解为给定的提交/构建/PR 发布图形所需的信息。
 
 ```typescript
 const publishOptions = {
@@ -236,9 +236,9 @@ const publishOptions = {
 };
 ```
 
-Most of this information is provided through CI/CD built-in environment variables (see [CircleCI built-in environment list](https://circleci.com/docs/variables/#built-in-environment-variables) and [Bitbucket variables](https://support.atlassian.com/bitbucket-cloud/docs/variables-and-secrets/) ).
+这些信息中的大部分是通过 CI/CD 内置环境变量提供的（参见 [CircleCI 内置环境变量列表](https://circleci.com/docs/variables/#built-in-environment-variables) 和 [Bitbucket 变量](https://support.atlassian.com/bitbucket-cloud/docs/variables-and-secrets/)）。
 
-When it comes to the pipeline configuration for publishing graphs, we recommend using the following triggers:
+关于发布图形的流水线配置，我们建议使用以下触发器：
 
-- `push` event - only if the current branch represents a deployment environment, for example `master`, `main`, `staging`, `production`, etc.
-- `pull request` event - always, or when the **target branch** represents a deployment environment (see above)
+- `push` 事件——仅当当前分支代表部署环境时，例如 `master`、`main`、`staging`、`production` 等。
+- `pull request` 事件——始终触发，或者当**目标分支**代表部署环境时（见上文）

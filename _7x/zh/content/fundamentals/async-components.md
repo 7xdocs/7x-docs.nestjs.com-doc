@@ -1,8 +1,8 @@
-### Asynchronous providers
+### 异步提供者
 
-At times, the application start should be delayed until one or more **asynchronous tasks** are completed. For example, you may not want to start accepting requests until the connection with the database has been established. You can achieve this using asynchronous providers.
+有时候，应用程序的启动需要延迟到某些**异步任务**完成之后。例如，您可能希望在建立与数据库的连接之前不开始接受请求。您可以使用异步提供者来实现这一点。
 
-The syntax for this is to use `async/await` with the `useFactory` syntax. The factory returns a `Promise`, and the factory function can `await` asynchronous tasks. Nest will await resolution of the promise before instantiating any class that depends on (injects) such a provider.
+实现这一点的语法是在 `useFactory` 语法中使用 `async/await`。工厂函数返回一个 `Promise`，并且工厂函数可以 `await` 异步任务。在实例化任何依赖于（注入）此类提供者的类之前，Nest 将等待 Promise 的解析。
 
 ```typescript
 {
@@ -14,12 +14,12 @@ The syntax for this is to use `async/await` with the `useFactory` syntax. The fa
 }
 ```
 
-> info **Hint** Learn more about custom provider syntax [here](/fundamentals/custom-providers).
+> info **提示** 在此处了解更多关于[自定义提供者](/fundamentals/custom-providers)的语法。
 
-#### Injection
+#### 注入
 
-Asynchronous providers are injected to other components by their tokens, like any other provider. In the example above, you would use the construct `@Inject('ASYNC_CONNECTION')`.
+异步提供者像任何其他提供者一样，通过它们的令牌注入到其他组件中。在上面的示例中，您将使用 `@Inject('ASYNC_CONNECTION')` 构造。
 
-#### Example
+#### 示例
 
-[The TypeORM recipe](/recipes/sql-typeorm) has a more substantial example of an asynchronous provider.
+[TypeORM 集成章节](/recipes/sql-typeorm)提供了一个更详尽的异步提供者示例。
