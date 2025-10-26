@@ -1,10 +1,10 @@
-### Operations
+### 操作（Operations）
 
-In OpenAPI terms, paths are endpoints (resources), such as `/users` or `/reports/summary`, that your API exposes, and operations are the HTTP methods used to manipulate these paths, such as `GET`, `POST` or `DELETE`.
+在 OpenAPI 中，路径（paths）是你的 API 所暴露的端点（资源），例如 `/users` 或 `/reports/summary`；而操作（operations）则是用于操作这些路径的 HTTP 方法，例如 `GET`、`POST` 或 `DELETE`。
 
-#### Tags
+#### 标签（Tags）
 
-To attach a controller to a specific tag, use the `@ApiTags(...tags)` decorator.
+要将控制器附加到特定的标签，请使用 `@ApiTags(...tags)` 装饰器。
 
 ```typescript
 @ApiTags('cats')
@@ -12,9 +12,9 @@ To attach a controller to a specific tag, use the `@ApiTags(...tags)` decorator.
 export class CatsController {}
 ```
 
-#### Headers
+#### 请求头（Headers）
 
-To define custom headers that are expected as part of the request, use `@ApiHeader()`.
+要定义请求中期望的自定义请求头，请使用 `@ApiHeader()`。
 
 ```typescript
 @ApiHeader({
@@ -25,9 +25,9 @@ To define custom headers that are expected as part of the request, use `@ApiHead
 export class CatsController {}
 ```
 
-#### Responses
+#### 响应（Responses）
 
-To define a custom HTTP response, use the `@ApiResponse()` decorator.
+要定义自定义的 HTTP 响应，请使用 `@ApiResponse()` 装饰器。
 
 ```typescript
 @Post()
@@ -38,7 +38,7 @@ async create(@Body() createCatDto: CreateCatDto) {
 }
 ```
 
-Nest provides a set of short-hand **API response** decorators that inherit from the `@ApiResponse` decorator:
+Nest 提供了一组继承自 `@ApiResponse` 装饰器的快捷 **API 响应** 装饰器：
 
 - `@ApiOkResponse()`
 - `@ApiCreatedResponse()`
@@ -76,7 +76,7 @@ async create(@Body() createCatDto: CreateCatDto) {
 }
 ```
 
-To specify a return model for a request, we must create a class and annotate all properties with the `@ApiProperty()` decorator.
+要为请求指定返回模型，我们必须创建一个类，并使用 `@ApiProperty()` 装饰器注解所有属性。
 
 ```typescript
 export class Cat {
@@ -94,7 +94,7 @@ export class Cat {
 }
 ```
 
-Then the `Cat` model can be used in combination with the `type` property of the response decorator.
+然后，`Cat` 模型可以与响应装饰器的 `type` 属性结合使用。
 
 ```typescript
 @ApiTags('cats')
@@ -111,13 +111,13 @@ export class CatsController {
 }
 ```
 
-Let's open the browser and verify the generated `Cat` model:
+让我们打开浏览器并验证生成的 `Cat` 模型：
 
 <figure><img src="/assets/swagger-response-type.png" /></figure>
 
-#### File upload
+#### 文件上传（File upload）
 
-You can enable file upload for a specific method with the `@ApiBody` decorator together with `@ApiConsumes()`. Here's a full example using the [File Upload](/techniques/file-upload) technique:
+你可以通过将 `@ApiBody` 装饰器与 `@ApiConsumes()` 结合使用，为特定方法启用文件上传功能。以下是一个使用 [文件上传](/techniques/file-upload) 技术的完整示例：
 
 ```typescript
 @UseInterceptors(FileInterceptor('file'))
@@ -129,7 +129,7 @@ You can enable file upload for a specific method with the `@ApiBody` decorator t
 uploadFile(@UploadedFile() file) {}
 ```
 
-Where `FileUploadDto` is defined as follows:
+其中 `FileUploadDto` 定义如下：
 
 ```typescript
 class FileUploadDto {
@@ -138,7 +138,7 @@ class FileUploadDto {
 }
 ```
 
-To handle multiple files uploading, you can define `FilesUploadDto` as follows:
+要处理多文件上传，你可以按如下方式定义 `FilesUploadDto`：
 
 ```typescript
 class FilesUploadDto {
@@ -147,17 +147,17 @@ class FilesUploadDto {
 }
 ```
 
-#### Extensions
+#### 扩展（Extensions）
 
-To add an Extension to a request use the `@ApiExtension()` decorator. The extension name must be prefixed with `x-`.
+要向请求添加扩展，请使用 `@ApiExtension()` 装饰器。扩展名必须以 `x-` 为前缀。
 
 ```typescript
 @ApiExtension('x-foo', { hello: 'world' })
 ```
 
-#### Advanced: Generic `ApiResponse`
+#### 高级用法：通用 `ApiResponse`
 
-With the ability to provide [Raw Definitions](/openapi/types-and-parameters#raw-definitions), we can define Generic schema for Swagger UI. Assume we have the following DTO:
+借助提供 [原始定义](/openapi/types-and-parameters#raw-definitions) 的能力，我们可以为 Swagger UI 定义通用模式。假设我们有以下 DTO：
 
 ```ts
 export class PaginatedDto<TData> {
@@ -174,7 +174,7 @@ export class PaginatedDto<TData> {
 }
 ```
 
-We skip decorating `results` as we will be providing a raw definition for it later. Now, let's define another DTO and name it, for example, `CatDto`, as follows:
+我们跳过了对 `results` 的装饰，因为我们稍后将为其提供原始定义。现在，让我们定义另一个 DTO，例如命名为 `CatDto`，如下所示：
 
 ```ts
 export class CatDto {
@@ -189,7 +189,7 @@ export class CatDto {
 }
 ```
 
-With this in place, we can define a `PaginatedDto<CatDto>` response, as follows:
+完成这些后，我们可以定义一个 `PaginatedDto<CatDto>` 响应，如下所示：
 
 ```ts
 @ApiOkResponse({
@@ -210,12 +210,12 @@ With this in place, we can define a `PaginatedDto<CatDto>` response, as follows:
 async findAll(): Promise<PaginatedDto<CatDto>> {}
 ```
 
-In this example, we specify that the response will have allOf `PaginatedDto` and the `results` property will be of type `Array<CatDto>`.
+在这个例子中，我们指定响应将包含 `PaginatedDto` 的所有属性（`allOf`），并且 `results` 属性将是 `Array<CatDto>` 类型。
 
-- `getSchemaPath()` function that returns the OpenAPI Schema path from within the OpenAPI Spec File for a given model.
-- `allOf` is a concept that OAS 3 provides to cover various Inheritance related use-cases.
+- `getSchemaPath()` 函数，它从 OpenAPI 规范文件中返回给定模型的 OpenAPI 模式路径。
+- `allOf` 是 OAS 3 提供的一个概念，用于覆盖各种与继承相关的用例。
 
-Lastly, since `PaginatedDto` is not directly referenced by any controller, the `SwaggerModule` will not be able to generate a corresponding model definition just yet. In this case, we must add it as an [Extra Model](/openapi/types-and-parameters#extra-models). For example, we can use the `@ApiExtraModels()` decorator on the controller level, as follows:
+最后，由于 `PaginatedDto` 没有被任何控制器直接引用，`SwaggerModule` 还无法生成相应的模型定义。在这种情况下，我们必须将其添加为 [额外模型](/openapi/types-and-parameters#extra-models)。例如，我们可以在控制器级别使用 `@ApiExtraModels()` 装饰器，如下所示：
 
 ```ts
 @Controller('cats')
@@ -223,7 +223,7 @@ Lastly, since `PaginatedDto` is not directly referenced by any controller, the `
 export class CatsController {}
 ```
 
-If you run Swagger now, the generated `swagger.json` for this specific endpoint should have the following response defined:
+如果你现在运行 Swagger，为此特定端点生成的 `swagger.json` 应该定义了以下响应：
 
 ```json
 "responses": {
@@ -251,7 +251,7 @@ If you run Swagger now, the generated `swagger.json` for this specific endpoint 
 }
 ```
 
-To make it reusable, we can create a custom decorator for `PaginatedDto`, as follows:
+为了使其可重用，我们可以为 `PaginatedDto` 创建一个自定义装饰器，如下所示：
 
 ```ts
 export const ApiPaginatedResponse = <TModel extends Type<any>>(
@@ -278,25 +278,25 @@ export const ApiPaginatedResponse = <TModel extends Type<any>>(
 };
 ```
 
-> info **Hint** `Type<any>` interface and `applyDecorators` function are imported from the `@nestjs/common` package.
+> info **提示** `Type<any>` 接口和 `applyDecorators` 函数是从 `@nestjs/common` 包中导入的。
 
-To ensure that `SwaggerModule` will generate a definition for our model, we must add it as an extra model, like we did earlier with the `PaginatedDto` in the controller.
+为了确保 `SwaggerModule` 会为我们的模型生成定义，我们必须像之前在控制器中对 `PaginatedDto` 所做的那样，将其添加为额外模型。
 
-With this in place, we can use the custom `@ApiPaginatedResponse()` decorator on our endpoint:
+完成这些后，我们可以在我们的端点上使用自定义的 `@ApiPaginatedResponse()` 装饰器：
 
 ```ts
 @ApiPaginatedResponse(CatDto)
 async findAll(): Promise<PaginatedDto<CatDto>> {}
 ```
 
-For client generation tools, this approach poses an ambiguity in how the `PaginatedResponse<TModel>` is being generated for the client. The following snippet is an example of a client generator result for the above `GET /` endpoint.
+对于客户端生成工具，这种方法在如何为客户端生成 `PaginatedResponse<TModel>` 方面存在歧义。以下代码片段是上述 `GET /` 端点的客户端生成器结果示例。
 
 ```typescript
 // Angular
 findAll(): Observable<{ total: number, limit: number, offset: number, results: CatDto[] }>
 ```
 
-As you can see, the **Return Type** here is ambiguous. To workaround this issue, you can add a `title` property to the `schema` for `ApiPaginatedResponse`:
+如你所见，这里的**返回类型**是模糊的。为了解决这个问题，你可以向 `ApiPaginatedResponse` 的 `schema` 添加一个 `title` 属性：
 
 ```typescript
 export const ApiPaginatedResponse = <TModel extends Type<any>>(model: TModel) => {
@@ -313,7 +313,7 @@ export const ApiPaginatedResponse = <TModel extends Type<any>>(model: TModel) =>
 };
 ```
 
-Now the result of the client generator tool will become:
+现在，客户端生成器工具的结果将变为：
 
 ```ts
 // Angular

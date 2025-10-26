@@ -15,6 +15,32 @@
 - 不要翻译代码块中的注释内容
 ```
 
+## 菜单
+在 `_7x/zh/src/app/homepage/menu/menu.component.ts` 配置菜单
+
+## 文档翻译
+在 `_7x/zh/src/app/homepage/homepage.component.ts` 找到r如下代码，需要申请 algoliaApiKey
+
+``` ts
+  createDocSearchScriptTag(): HTMLScriptElement {
+    const scriptTag = document.createElement('script');
+    scriptTag.type = 'text/javascript';
+    scriptTag.src = 'https://cdn.jsdelivr.net/npm/@docsearch/js@3';
+    scriptTag.async = true;
+    scriptTag.onload = () => {
+      (window as any).docsearch({
+        apiKey: environment.algoliaApiKey,
+        indexName: 'nestjs',
+        container: '#search',
+        appId: 'SDCBYAN96J',
+        debug: false,
+      });
+    };
+    return scriptTag;
+  }
+  ```
+
+
 ## 代码提交
 
 使用 git commit --no-verify -m "xxx" 提交代码,忽略检测
