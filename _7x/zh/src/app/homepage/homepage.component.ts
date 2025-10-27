@@ -137,18 +137,18 @@ export class HomepageComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     this.contentRef = nativeElement.querySelector('.content');
-    if (this.contentRef && !this.contentRef.querySelector('.carbon-wrapper')) {
-      const scriptTag = this.createCarbonScriptTag();
-      const carbonWrapper = document.createElement('div');
-      carbonWrapper.classList.add('carbon-wrapper');
+    // if (this.contentRef && !this.contentRef.querySelector('.carbon-wrapper')) {
+    //   const scriptTag = this.createCarbonScriptTag();
+    //   const carbonWrapper = document.createElement('div');
+    //   carbonWrapper.classList.add('carbon-wrapper');
 
-      if (window.innerWidth > CARBON_WIDTH_BREAKPOINT) {
-        carbonWrapper.classList.add('hide');
-      }
-      carbonWrapper.prepend(scriptTag);
+    //   if (window.innerWidth > CARBON_WIDTH_BREAKPOINT) {
+    //     carbonWrapper.classList.add('hide');
+    //   }
+    //   carbonWrapper.prepend(scriptTag);
 
-      this.contentRef.prepend(carbonWrapper);
-    }
+    //   this.contentRef.prepend(carbonWrapper);
+    // }
 
     this.cd.markForCheck();
 
